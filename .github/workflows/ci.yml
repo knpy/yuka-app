@@ -38,6 +38,14 @@ jobs:
       - name: Run build
         run: npm run build
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          PLAYWRIGHT_BASE_URL: http://localhost:3000
+
       - name: Check bundle size
         run: |
           npm run build
