@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import { Authenticator } from '@aws-amplify/ui-react'
 import LoginButton from './LoginButton'

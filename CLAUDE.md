@@ -306,6 +306,111 @@ aws logs describe-log-groups
 
 ## 開発プロセスとGit運用ルール
 
+### ⚠️ **絶対禁止事項**
+- **mainブランチでの直接作業・コミット**
+- **mainブランチへの直接プッシュ**
+- **テストが通らない状態でのコミット**
+
+### ✅ **必須手順（TDD適用）**
+1. **機能ブランチ作成**
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout -b feature/機能名
+   ```
+
+2. **TDDサイクル実行**
+   ```bash
+   # Red: 失敗するテストを書く
+   npm test
+   
+   # Green: テストが通るコードを書く
+   npm test
+   
+   # Refactor: コードを改善
+   npm test
+   ```
+
+3. **コミット前チェック（必須）**
+   ```bash
+   npm run lint      # リント通過
+   npm run type-check # 型チェック通過
+   npm test          # 全テスト通過
+   npm run build     # ビルド成功
+   ```
+
+### 🚨 **CI/CD失敗時の対応ルール**
+
+**Claude Codeは以下の手順でCI/CD失敗を即座に修正します：**
+
+1. **CI失敗検知時**
+   ```bash
+   gh run list --limit 5           # 最新のrun確認
+   gh run view [RUN_ID]            # 失敗詳細確認
+   gh run view [RUN_ID] --log-failed # 失敗ログ確認
+   ```
+
+2. **失敗箇所の修正**
+   - **型エラー**: TypeScript型定義を適切に修正
+   - **テストエラー**: テストコードまたは実装コードを修正
+   - **リントエラー**: ESLintルールに従って修正
+   - **ビルドエラー**: 依存関係やインポートを修正
+
+3. **修正後の検証**
+   ```bash
+   npm run lint && npm run type-check && npm test && npm run build
+   ```
+
+4. **修正コミット**
+   ```bash
+   git add .
+   git commit -m "fix: CI/CD失敗修正 - [具体的な修正内容]"
+   git push origin ブランチ名
+   ```
+
+### ⚠️ **CI/CD通過の絶対条件**
+- **全てのジョブが緑色**: lint/type-check/test/buildが全て成功
+- **型エラーゼロ**: TypeScriptコンパイルエラーなし  
+- **テスト通過率100%**: 全テストケースが成功
+- **リント違反ゼロ**: ESLintエラー・警告なし
+- **ビルド成功**: Next.js本番ビルドが正常完了
+
+### 🤖 **Claude Code自動実行ルール**
+Claude Codeは以下を**自動的に実行**します：
+
+1. **作業開始時**
+   ```bash
+   git fetch origin
+   git status
+   git checkout main
+   git pull origin main
+   ```
+
+2. **TDDサイクルでの開発**
+   - テストファースト開発の徹底
+   - 各サイクルでのテスト実行確認
+   - 全テスト通過後のコミット
+
+3. **コミット前検証**
+   ```bash
+   npm run lint && npm run type-check && npm test && npm run build
+   ```
+
+4. **プルリクエスト作成前**
+   ```bash
+   git fetch origin
+   git push -u origin ブランチ名
+   gh pr create --title "タイトル" --body "詳細"
+   ```
+
+### ブランチ命名規則
+- **main**: 本番相当のコード（直接編集禁止）
+- **feature/機能名**: 新機能開発
+- **fix/問題名**: バグ修正
+- **test/テスト内容**: テスト追加・改善
+- **docs/内容**: ドキュメント更新
+- **chore/作業内容**: 設定変更・メンテナンス
+
 ### 自動コミット・プルリクエストのタイミング
 
 Claude Codeは以下のタイミングで**自動的に**gitコミットとプルリクエストを実行します：
