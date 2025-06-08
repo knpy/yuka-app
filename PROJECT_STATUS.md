@@ -30,28 +30,36 @@
 - 型安全性の強制ルール追加
 - TypeScript型エラー対応手順明文化
 - MVP開発原則の詳細化
+- CI/CD失敗時の対応ルール追加
+- ブランチ運用ルール明文化
+
+### 4. 認証機能の型エラー修正 ✅
+- LoginButton.tsx: useAuthenticatorのsignIn→signOut/user修正
+- LoginButton.test.tsx: Jest DOM型定義エラー修正（@testing-library/jest-dom追加）
+- AuthProvider.tsx: amplifyconfiguration.json型安全性確保
+- 全CI/CDテスト通過確認済み
+
+### 5. AWS Amplifyデプロイ設定 ✅
+- amplify.yml: Next.jsビルド設定
+- マルチ環境対応（prod/dev）
+- DEPLOY_GUIDE.md: デプロイ手順書作成
+- AWS Amplifyホスティング本番デプロイ完了
+- 開発環境（developブランチ）接続完了
 
 ## 🔄 現在進行中・未完了タスク
 
-### 1. ログインボタンコンポーネントの完成 🚧
-**問題**: 型エラーが発生中
-- `src/components/auth/LoginButton.tsx` - useAuthenticatorのsignInプロパティエラー
-- `src/components/auth/LoginButton.test.tsx` - テスト型定義エラー
-- `src/amplifyconfiguration.json` - responseType型エラー
-
-**必要な対応**:
-```typescript
-// LoginButton.tsx修正が必要
-const { signOut, user } = useAuthenticator(); // signInは存在しない
-
-// テスト型定義修正が必要
-import '@testing-library/jest-dom'; // toBeInTheDocumentのため
-```
+### 1. AWS Cognito認証設定 🚧
+**必要な作業**:
+- Cognitoユーザープール作成
+- Google OAuthプロバイダー設定
+- amplifyconfiguration.jsonを実際の設定値に更新
+- 認証フローの動作確認
 
 ### 2. 今後のタスク 📋
 - Google Calendar API連携のLambda関数作成
 - 日報生成用のAI機能実装
-- AWS Amplify実際の設定（認証プロバイダー）
+- 実際の認証フロー完成（ログイン/ログアウト）
+- Calendar APIアクセス権限設定
 
 ## 🛠️ 技術スタック現状
 
@@ -71,22 +79,38 @@ import '@testing-library/jest-dom'; // toBeInTheDocumentのため
 - ESLint 9.x
 - GitHub Actions CI/CD
 
+### インフラ・デプロイ
+- AWS Amplify Hosting
+  - 本番環境: main ブランチ
+  - 開発環境: develop ブランチ
+- AWS無料枠での運用
+- マルチ環境CI/CD
+
+## 🌐 デプロイ環境
+
+### 本番環境
+- URL: https://main.[app-id].amplifyapp.com
+- ブランチ: main
+- 自動デプロイ: main へのプッシュ時
+
+### 開発環境
+- URL: https://dev.[app-id].amplifyapp.com
+- ブランチ: develop
+- 自動デプロイ: develop へのプッシュ時
+
+### 開発フロー
+1. feature/* → develop (PR)
+2. 開発環境での動作確認
+3. develop → main (PR)
+4. 本番環境への自動デプロイ
+
 ## 🚨 現在の課題
 
-### 型エラー解決が必要
-1. **AuthProvider設定**: amplifyconfiguration.jsonの型定義
-2. **LoginButton実装**: useAuthenticatorの正しい使用方法
-3. **テスト環境**: Jest DOM型定義の適切な設定
-
-### 次回作業で解決すべき項目
-```bash
-# 型チェックでエラーとなっている箇所
-npm run type-check
-# 以下のエラーを解決する必要あり:
-# - AuthProvider.tsx: Amplify設定の型エラー
-# - LoginButton.tsx: useAuthenticatorプロパティエラー  
-# - LoginButton.test.tsx: Jest DOM型定義エラー
-```
+### AWS Cognito設定が必要
+1. **ユーザープール作成**: 認証管理
+2. **Google OAuth設定**: Googleアカウントでのログイン
+3. **実際の設定値**: amplifyconfiguration.jsonにplaceholderが残存
+4. **認証フロー**: ログイン/ログアウトの動作確認
 
 ## 📁 重要ファイル構成
 
@@ -94,23 +118,49 @@ npm run type-check
 yuka-app/
 ├── src/
 │   ├── components/auth/
-│   │   ├── AuthProvider.tsx        # Amplify設定済み
-│   │   ├── LoginButton.tsx         # 型エラー要修正
-│   │   └── LoginButton.test.tsx    # 型エラー要修正
+│   │   ├── AuthProvider.tsx        # Amplify設定済み（型安全）
+│   │   ├── LoginButton.tsx         # 型エラー修正済み
+│   │   └── LoginButton.test.tsx    # 型エラー修正済み
 │   ├── app/
 │   │   └── layout.tsx              # AuthProvider統合済み
-│   └── amplifyconfiguration.json   # 型エラー要修正
+│   └── amplifyconfiguration.json   # placeholder値（要更新）
 ├── .github/workflows/              # CI/CD完成
-├── .env.local.example             # 環境変数テンプレート
-├── CLAUDE.md                      # プロジェクト指針（型安全性ルール追加済み）
-└── PROJECT_STATUS.md             # このファイル
+├── amplify.yml                     # Amplifyビルド設定
+├── DEPLOY_GUIDE.md                 # デプロイ手順書
+├── .env.production/.env.development # 環境別設定
+├── .env.local.example              # 環境変数テンプレート
+├── CLAUDE.md                       # プロジェクト指針完成
+└── PROJECT_STATUS.md              # このファイル
 ```
+
+## 📊 AWS無料枠での運用状況
+
+### 現在の使用量
+- **Amplify Hosting**: 2環境（本番/開発）
+- **データ転送**: 月15GB無料枠内
+- **ビルド時間**: 月1000分無料枠内
+- **ストレージ**: 月5GB無料枠内
+
+### コスト管理
+- CI/CDでコスト監視設定済み
+- 無料枠超過アラート設定
+- 不要な環境の自動クリーンアップ
 
 ## 🎯 次回継続時の指示
 
-1. **型エラー修正を最優先で実行**
-2. **TDD原則に従いテストファーストで進める**
-3. **AWS無料枠を意識したMVP開発を継続**
-4. **認証機能の基本実装完成後、Calendar API連携に進む**
+### 優先度高
+1. **AWS Cognito認証設定**: Google OAuthプロバイダー追加
+2. **amplifyconfiguration.json更新**: 実際の設定値に置換
+3. **認証フロー動作確認**: ログイン/ログアウト機能
+
+### 優先度中
+4. **Google Calendar API連携**: Lambda関数作成
+5. **AI機能実装**: 日報生成機能
+6. **E2Eテスト**: 認証フローのテスト追加
+
+### 開発方針
+- **TDD原則**: テストファーストで進める
+- **AWS無料枠**: コスト意識したMVP開発
+- **マルチ環境**: develop → main のフロー活用
 
 VSCode再起動後はこのファイルを参照して作業を継続してください。
