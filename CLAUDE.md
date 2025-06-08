@@ -43,6 +43,51 @@
 - Googleカレンダーの情報を基に、AIが日報を生成できる
 - 月額0円での運用（AWS無料利用枠内）
 
+## 🔒 型安全性とコード品質の強制ルール
+
+### TypeScript型安全性の絶対原則
+**Claude Codeは以下の型安全性ルールを絶対に遵守してください：**
+
+1. **型エラーゼロ原則** - `npm run type-check`でエラーが出ない状態を維持
+2. **`any`型の禁止** - 明示的な型定義を必須とする
+3. **外部ライブラリ設定時の型安全性** - 設定ファイルでも適切な型を使用
+4. **テストファイルの型安全性** - Jest関連の型定義を適切に設定
+
+### 型エラー対応の優先順位
+1. **設定ファイルの型安全性** - JSONファイルもTypeScriptで型チェック
+2. **外部ライブラリの型定義** - `@types/`パッケージの適切なインストール
+3. **テスト環境の型設定** - Jest, Testing Libraryの型定義統合
+4. **constアサーション** - リテラル型が必要な場合の適切な使用
+
+### 型エラー解決の標準手順
+```typescript
+// ❌ 悪い例：any型を使用
+const config: any = { ... }
+
+// ✅ 良い例：適切な型定義
+interface ConfigType {
+  responseType: 'code' | 'token';
+}
+const config: ConfigType = {
+  responseType: 'code' as const
+}
+
+// ❌ 悪い例：型定義なしのテスト
+expect(element).toBeInTheDocument() // 型エラー
+
+// ✅ 良い例：適切な型定義
+import '@testing-library/jest-dom'
+expect(element).toBeInTheDocument() // 型安全
+```
+
+### 必須デベロッパー依存関係
+```json
+{
+  "@types/jest": "^29.0.0",
+  "@types/testing-library__jest-dom": "^5.14.0"
+}
+```
+
 ## 🧪 テスト駆動開発（TDD）原則
 
 ### TDD サイクルの徹底
