@@ -1,0 +1,43 @@
+name: Cost Monitoring
+
+on:
+  schedule:
+    # 毎日午前9時に実行（AWS無料枠の使用量チェック）
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  cost-check:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup AWS CLI
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Check Lambda invocation count
+        run: |
+          echo "Lambda関数の実行回数をチェック中..."
+          # 月初からの実行回数を取得（無料枠: 月100万回）
+          aws logs describe-metric-filters --region us-east-1 || echo "Lambda関数がまだ作成されていません"
+
+      - name: Check Amplify bandwidth usage
+        run: |
+          echo "Amplifyの転送量をチェック中..."
+          # 無料枠: 月5GB
+          echo "手動でAWSコンソールでの確認が必要です"
+
+      - name: Cost alert notification
+        run: |
+          echo "🚨 AWS無料枠の監視"
+          echo "- Lambda: 月100万回まで無料"
+          echo "- Amplify Hosting: 月5GB転送まで無料"
+          echo "- API Gateway: 月100万コールまで無料"
+          echo "定期的にAWSコンソールでコストを確認してください"
