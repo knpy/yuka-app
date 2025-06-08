@@ -1,0 +1,18 @@
+{
+  "Auth": {
+    "Cognito": {
+      "userPoolId": "us-east-1_placeholder",
+      "userPoolClientId": "placeholder",
+      "identityPoolId": "us-east-1:placeholder",
+      "loginWith": {
+        "oauth": {
+          "domain": "placeholder.auth.us-east-1.amazoncognito.com",
+          "scopes": ["email", "openid", "profile"],
+          "redirectSignIn": ["http://localhost:3000/", "https://yuka-app.amplifyapp.com/"],
+          "redirectSignOut": ["http://localhost:3000/", "https://yuka-app.amplifyapp.com/"],
+          "responseType": "code"
+        }
+      }
+    }
+  }
+}
