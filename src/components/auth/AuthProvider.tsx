@@ -64,7 +64,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const config = createAmplifyConfig();
     console.log('AuthProvider initialized');
     console.log('Dynamic Amplify config:', config);
+    console.log('Current redirect URLs:', config.Auth.Cognito.loginWith.oauth.redirectSignIn);
     console.log('Environment:', process.env.NODE_ENV);
+    console.log('Window origin:', typeof window !== 'undefined' ? window.location.origin : 'SSR');
     
     // Amplifyの設定を更新
     Amplify.configure(config);
