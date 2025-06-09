@@ -308,15 +308,36 @@ aws logs describe-log-groups
 
 ### ⚠️ **絶対禁止事項**
 - **mainブランチでの直接作業・コミット**
-- **mainブランチへの直接プッシュ**
+- **mainブランチへの直接プッシュ** 
+- **developブランチを経由しない本番デプロイ**
 - **テストが通らない状態でのコミット**
+
+### ✅ **正しい開発フロー**
+```
+feature/* → develop → main (本番)
+    ↓         ↓        ↓
+  開発作業   検証環境   本番環境
+```
 
 ### ✅ **必須手順（TDD適用）**
 1. **機能ブランチ作成**
    ```bash
-   git checkout main
-   git pull origin main
+   git checkout develop
+   git pull origin develop  
    git checkout -b feature/機能名
+   ```
+
+2. **作業完了後**
+   ```bash
+   # developにマージ（開発環境デプロイ）
+   git checkout develop
+   git merge feature/機能名
+   git push origin develop
+   
+   # 検証後、mainにマージ（本番デプロイ）
+   git checkout main
+   git merge develop
+   git push origin main
    ```
 
 2. **TDDサイクル実行**
