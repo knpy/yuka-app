@@ -3,7 +3,6 @@
     "Cognito": {
       "userPoolId": "ap-northeast-1_MvXXrt5uB",
       "userPoolClientId": "1gujltpeo30a92aogcsv8os2fb",
-      "identityPoolId": "ap-northeast-1:placeholder",
       "loginWith": {
         "oauth": {
           "domain": "ap-northeast-1mvxxrt5ub.auth.ap-northeast-1.amazoncognito.com",

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import LoginButton from "@/components/auth/LoginButton";
+import UserProfile from "@/components/auth/UserProfile";
 
 export default function Home() {
   return (
@@ -11,6 +12,9 @@ export default function Home() {
           <h2 className="text-xl font-bold mb-4">🔐 認証テスト</h2>
           <LoginButton />
         </div>
+
+        {/* ユーザー情報表示 */}
+        <UserProfile />
         <Image
           className="dark:invert"
           src="/next.svg"
