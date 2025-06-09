@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
@@ -32,6 +33,13 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  // デバッグ: Amplify設定確認
+  React.useEffect(() => {
+    console.log('AuthProvider initialized');
+    console.log('Amplify config:', config);
+    console.log('Environment:', process.env.NODE_ENV);
+  }, []);
+
   return (
     <Authenticator.Provider>
       {children}

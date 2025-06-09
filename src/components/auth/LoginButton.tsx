@@ -6,12 +6,14 @@ import { signInWithRedirect } from 'aws-amplify/auth';
 export default function LoginButton() {
   const { signOut, user } = useAuthenticator((context) => [context.user]);
 
-  
   const handleLogin = async () => {
     try {
+      console.log('Login button clicked - attempting signInWithRedirect');
+      console.log('Current domain:', window.location.hostname);
       await signInWithRedirect({ provider: 'Google' });
     } catch (error) {
       console.error('Login error:', error);
+      alert(`Login error: ${error instanceof Error ? error.message : String(error)}`);
     }
   };
   
