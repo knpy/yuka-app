@@ -6,9 +6,9 @@ import { fetchUserAttributes, fetchAuthSession } from 'aws-amplify/auth';
 
 export default function UserProfile() {
   const { user } = useAuthenticator((context) => [context.user]);
-  const [userAttributes, setUserAttributes] = React.useState<Record<string, any> | null>(null);
+  const [userAttributes, setUserAttributes] = React.useState<Record<string, string> | null>(null);
   const [loading, setLoading] = React.useState(false);
-  const [sessionInfo, setSessionInfo] = React.useState<any>(null);
+  const [sessionInfo, setSessionInfo] = React.useState<Record<string, unknown> | null>(null);
 
   // ユーザー属性を直接取得する関数
   const fetchAttributes = React.useCallback(async () => {
@@ -20,7 +20,7 @@ export default function UserProfile() {
       console.log('user object:', user);
       console.log('user.userId:', user.userId);
       console.log('user.username:', user.username);
-      console.log('user.attributes:', user.attributes);
+      // user.attributes は型定義に存在しないためコメントアウト
       console.log('user.signInDetails:', user.signInDetails);
       
       // まずセッション情報を取得（これは成功するはず）
@@ -55,11 +55,15 @@ export default function UserProfile() {
       }
     } catch (error) {
       console.error('❌ fetchUserAttributes エラー:', error);
-      console.error('エラー詳細:', {
-        message: error.message,
-        name: error.name,
-        stack: error.stack
-      });
+      if (error instanceof Error) {
+        console.error('エラー詳細:', {
+          message: error.message,
+          name: error.name,
+          stack: error.stack
+        });
+      } else {
+        console.error('エラー詳細:', 'Unknown error type');
+      }
     } finally {
       setLoading(false);
     }
@@ -123,19 +127,7 @@ export default function UserProfile() {
         </div>
       </div>
 
-      {/* 従来のuser.attributes */}
-      {user.attributes && Object.keys(user.attributes).length > 0 && (
-        <div className="mb-4">
-          <h3 className="font-semibold text-blue-700 mb-2">User.attributes (従来)</h3>
-          <div className="bg-white p-3 rounded border text-sm space-y-1">
-            {Object.entries(user.attributes).map(([key, value]) => (
-              <p key={key}>
-                <strong>{key}:</strong> {String(value)}
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* user.attributes は型定義に存在しないためコメントアウト */}
 
       {/* IDトークンペイロード */}
       {sessionInfo && (

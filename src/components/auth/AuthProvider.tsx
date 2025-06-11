@@ -130,7 +130,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           setIsAuthorized(null);
           setUserEmail(null);
         }
-      } catch (error) {
+      } catch {
         setIsAuthorized(null);
         setUserEmail(null);
       }

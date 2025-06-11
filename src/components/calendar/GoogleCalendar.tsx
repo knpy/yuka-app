@@ -25,7 +25,8 @@ export default function GoogleCalendar() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
-  // 今日の日付を取得
+  // 今日の日付を取得（現在は使用していないがユーティリティとして保持）
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const getTodayDateRange = () => {
     const today = new Date();
     const startOfDay = new Date(today);

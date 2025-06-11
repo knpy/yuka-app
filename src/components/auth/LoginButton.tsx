@@ -6,7 +6,12 @@ import { signInWithRedirect, fetchAuthSession } from 'aws-amplify/auth';
 
 export default function LoginButton() {
   const { signOut, user } = useAuthenticator((context) => [context.user]);
-  const [userInfo, setUserInfo] = React.useState<any>(null);
+  const [userInfo, setUserInfo] = React.useState<{
+    email?: string;
+    provider?: string;
+    name?: string;
+    username?: string;
+  } | null>(null);
 
   // ログイン時にユーザー情報を取得
   React.useEffect(() => {
@@ -21,10 +26,10 @@ export default function LoginButton() {
       if (session.tokens?.idToken) {
         const payload = session.tokens.idToken.payload;
         setUserInfo({
-          email: payload.email,
-          name: payload.name,
+          email: payload.email as string,
+          name: payload.name as string,
           provider: 'Google OAuth',
-          username: payload['cognito:username']
+          username: payload['cognito:username'] as string
         });
       }
     } catch (error) {

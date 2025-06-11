@@ -1,3 +1,4 @@
+// @ts-expect-error NextAuth v4 types
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
@@ -8,7 +9,8 @@ console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? `${proce
 console.log('NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'defined' : 'undefined');
 console.log('NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
 
-const handler = NextAuth({
+// @ts-expect-error NextAuth v4 configuration
+const authOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -53,7 +55,6 @@ const handler = NextAuth({
     async session({ session, token }) {
       console.log('Session Callback - Token keys:', Object.keys(token));
       
-      // @ts-ignore - NextAuthのセッション型を拡張
       session.accessToken = token.accessToken
       session.refreshToken = token.refreshToken
       session.expiresAt = token.expiresAt
@@ -63,6 +64,9 @@ const handler = NextAuth({
   },
   debug: true,
   secret: process.env.NEXTAUTH_SECRET,
-})
+}
+
+// @ts-expect-error NextAuth v4 handler
+const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }

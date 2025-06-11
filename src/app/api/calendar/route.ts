@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    const googleIdentity = idTokenPayload.identities.find((id: any) => 
+    const googleIdentity = idTokenPayload.identities.find((id: { providerName?: string; provider?: string }) => 
       id.providerName === 'Google' || id.provider === 'google'
     );
     
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
           error: 'Googleプロバイダーが見つかりません',
           debug: { 
             identities: idTokenPayload.identities,
-            availableProviders: idTokenPayload.identities.map((id: any) => id.providerName || id.provider)
+            availableProviders: idTokenPayload.identities.map((id: { providerName?: string; provider?: string }) => id.providerName || id.provider)
           }
         },
         { status: 400 }
