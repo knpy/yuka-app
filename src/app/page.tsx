@@ -1,20 +1,44 @@
 import Image from "next/image";
 import LoginButton from "@/components/auth/LoginButton";
 import UserProfile from "@/components/auth/UserProfile";
+import GoogleCalendar from "@/components/calendar/GoogleCalendar";
+import GoogleCalendarDirect from "@/components/calendar/GoogleCalendarDirect";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+    <div className="min-h-screen p-8 pb-20 gap-8 font-[family-name:var(--font-geist-sans)]">
+      <main className="max-w-6xl mx-auto space-y-8">
         
-        {/* 認証テスト用のLoginButton */}
+        {/* ヘッダー */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">📝 日報作成支援アプリ</h1>
+          <p className="text-gray-600">Googleカレンダーの予定から、AIが自動で日報を生成します</p>
+        </div>
+        
+        {/* 認証セクション */}
         <div className="mb-8">
-          <h2 className="text-xl font-bold mb-4">🔐 認証テスト</h2>
+          <h2 className="text-xl font-bold mb-4">🔐 認証</h2>
           <LoginButton />
         </div>
 
-        {/* ユーザー情報表示 */}
-        <UserProfile />
+        {/* カレンダー情報（新しい直接連携） */}
+        <GoogleCalendarDirect />
+
+        {/* 旧カレンダー情報（デバッグ用） */}
+        <details>
+          <summary className="text-lg font-semibold cursor-pointer text-gray-700">🔍 デバッグ: Cognito経由Calendar API</summary>
+          <div className="mt-4">
+            <GoogleCalendar />
+          </div>
+        </details>
+
+        {/* ユーザー情報表示（デバッグ用） */}
+        <details>
+          <summary className="text-lg font-semibold cursor-pointer text-gray-700">🔍 デバッグ: ユーザー情報詳細</summary>
+          <div className="mt-4">
+            <UserProfile />
+          </div>
+        </details>
         <Image
           className="dark:invert"
           src="/next.svg"

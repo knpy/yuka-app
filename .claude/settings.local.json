@@ -3,7 +3,11 @@
     "allow": [
       "Bash(gh run view:*)",
       "Bash(git checkout:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run type-check:*)",
+      "Bash(npm test)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
