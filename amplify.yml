@@ -15,3 +15,10 @@ frontend:
     paths:
       - node_modules/**/*
       - .next/cache/**/*
+  environmentVariables:
+    # NextAuth設定
+    NEXTAUTH_SECRET: $NEXTAUTH_SECRET
+    NEXTAUTH_URL: $NEXTAUTH_URL
+    # Google OAuth設定
+    GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+    GOOGLE_CLIENT_SECRET: $GOOGLE_CLIENT_SECRET
