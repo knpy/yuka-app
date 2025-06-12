@@ -7,6 +7,16 @@ console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? `${process.env.G
 console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? `${process.env.GOOGLE_CLIENT_SECRET.substring(0, 10)}...` : 'undefined');
 console.log('NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'defined' : 'undefined');
 console.log('NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
+console.log('NODE_ENV:', process.env.NODE_ENV);
+
+// 環境に応じたNEXTAUTH_URLの確認（環境変数が必要）
+const nextAuthUrl = process.env.NEXTAUTH_URL;
+if (!nextAuthUrl) {
+  console.warn('⚠️ NEXTAUTH_URLが設定されていません。AWS Amplifyの環境変数を確認してください。');
+  console.warn('開発環境: https://develop.d3pqwcrqokah2b.amplifyapp.com');
+  console.warn('本番環境: https://main.d3pqwcrqokah2b.amplifyapp.com');
+}
+console.log('設定されたNEXTAUTH_URL:', nextAuthUrl);
 
 const handler = NextAuth({
   providers: [
