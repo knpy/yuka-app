@@ -9,14 +9,38 @@ console.log('NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'defined' : 'undef
 console.log('NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
 console.log('NODE_ENV:', process.env.NODE_ENV);
 
-// 環境に応じたNEXTAUTH_URLの確認（環境変数が必要）
-const nextAuthUrl = process.env.NEXTAUTH_URL;
-if (!nextAuthUrl) {
-  console.warn('⚠️ NEXTAUTH_URLが設定されていません。AWS Amplifyの環境変数を確認してください。');
-  console.warn('開発環境: https://develop.d3pqwcrqokah2b.amplifyapp.com');
-  console.warn('本番環境: https://main.d3pqwcrqokah2b.amplifyapp.com');
+// AWS Amplify環境変数デバッグ
+console.log('🔍 AWS Amplify環境変数:');
+console.log('AWS_BRANCH:', process.env.AWS_BRANCH);
+console.log('AWS_APP_ID:', process.env.AWS_APP_ID);
+console.log('AWS_REGION:', process.env.AWS_REGION);
+console.log('VERCEL_URL:', process.env.VERCEL_URL);
+
+// 環境に応じたNEXTAUTH_URLの動的設定
+let nextAuthUrl = process.env.NEXTAUTH_URL;
+
+// AWS Amplifyで環境変数が効かない場合の強制設定
+if (!nextAuthUrl || nextAuthUrl.includes('localhost')) {
+  const hostname = process.env.VERCEL_URL || 
+                   process.env.AWS_BRANCH || 
+                   process.env.AWS_COMMIT_ID;
+  
+  if (hostname === 'develop' || process.env.AWS_BRANCH === 'develop') {
+    nextAuthUrl = 'https://develop.d3pqwcrqokah2b.amplifyapp.com';
+  } else if (hostname === 'main' || process.env.AWS_BRANCH === 'main') {
+    nextAuthUrl = 'https://main.d3pqwcrqokah2b.amplifyapp.com';
+  } else {
+    // デフォルトで開発環境を使用
+    nextAuthUrl = 'https://develop.d3pqwcrqokah2b.amplifyapp.com';
+  }
+  
+  console.warn('⚠️ NEXTAUTH_URLを動的に設定:', nextAuthUrl);
+} else {
+  console.log('✅ 設定済みNEXTAUTH_URL:', nextAuthUrl);
 }
-console.log('設定されたNEXTAUTH_URL:', nextAuthUrl);
+
+// 環境変数を強制上書き
+process.env.NEXTAUTH_URL = nextAuthUrl;
 
 const handler = NextAuth({
   providers: [
@@ -25,7 +49,15 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
         params: {
-          scope: 'openid email profile https://www.googleapis.com/auth/calendar.readonly',
+          scope: [
+            'openid',
+            'email', 
+            'profile',
+            'https://www.googleapis.com/auth/calendar.readonly'
+          ].join(' '),
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code'
         }
       }
     })
@@ -34,38 +66,58 @@ const handler = NextAuth({
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  pages: {
+    error: '/auth/error', // カスタムエラーページ（オプション）
+  },
   callbacks: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, account, profile }: any) {
       try {
-        console.log('JWT Callback - Account:', account);
-        console.log('JWT Callback - Profile:', profile);
-        
+        // 初回認証時のみaccountとprofileが渡される
         if (account) {
-          token.accessToken = account.access_token
-          token.refreshToken = account.refresh_token
-          token.expiresAt = account.expires_at
-          console.log('Access token stored:', !!account.access_token);
+          console.log('🔑 初回認証 - Account:', !!account);
+          console.log('👤 初回認証 - Profile:', !!profile);
+          
+          // OAuth情報をトークンに保存
+          token.accessToken = account.access_token;
+          token.refreshToken = account.refresh_token;
+          token.expiresAt = account.expires_at;
+          token.provider = account.provider;
+          
+          console.log('✅ Access token stored:', !!account.access_token);
+          console.log('✅ Refresh token stored:', !!account.refresh_token);
+        } else {
+          // セッション更新時はaccountがundefinedになる（正常）
+          console.log('🔄 セッション更新 - 既存トークン使用');
         }
-        return token
+        
+        return token;
       } catch (error) {
-        console.error('JWT Callback Error:', error);
-        return token
+        console.error('❌ JWT Callback Error:', error);
+        return token;
       }
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async session({ session, token }: any) {
       try {
-        console.log('Session Callback - Token keys:', Object.keys(token));
+        console.log('🎫 Session Callback - Token keys:', Object.keys(token));
         
-        session.accessToken = token.accessToken
-        session.refreshToken = token.refreshToken
-        session.expiresAt = token.expiresAt
+        // トークン情報をセッションに追加
+        if (token.accessToken) {
+          session.accessToken = token.accessToken;
+          session.refreshToken = token.refreshToken;
+          session.expiresAt = token.expiresAt;
+          session.provider = token.provider;
+          
+          console.log('✅ Session updated with tokens');
+        } else {
+          console.warn('⚠️ No access token in session');
+        }
         
-        return session
+        return session;
       } catch (error) {
-        console.error('Session Callback Error:', error);
-        return session
+        console.error('❌ Session Callback Error:', error);
+        return session;
       }
     }
   },
