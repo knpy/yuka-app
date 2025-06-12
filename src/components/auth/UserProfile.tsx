@@ -40,16 +40,16 @@ export default function UserProfile() {
       try {
         const attributes = await fetchUserAttributes();
         console.log('✅ fetchUserAttributes結果:', attributes);
-        setUserAttributes(attributes);
+        setUserAttributes(attributes as Record<string, string>);
       } catch (attributeError) {
         console.log('⚠️ fetchUserAttributes失敗（一時的にスキップ）:', attributeError);
         // IDトークンのペイロードから属性を使用
         if (session.tokens?.idToken) {
           const payload = session.tokens.idToken.payload;
           setUserAttributes({
-            email: payload.email,
-            name: payload.name,
-            username: payload['cognito:username']
+            email: payload.email as string,
+            name: payload.name as string,
+            username: payload['cognito:username'] as string
           });
         }
       }

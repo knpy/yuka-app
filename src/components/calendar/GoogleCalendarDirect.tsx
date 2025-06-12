@@ -26,7 +26,8 @@ export default function GoogleCalendarDirect() {
 
   // Google Calendar APIから今日の予定を取得
   const fetchCalendarEvents = async () => {
-    if (!session?.accessToken) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!(session as any)?.accessToken) {
       setError('Google認証が必要です');
       return;
     }
@@ -36,7 +37,8 @@ export default function GoogleCalendarDirect() {
 
     try {
       console.log('📅 Calendar API呼び出し開始');
-      console.log('Access token available:', !!session.accessToken);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      console.log('Access token available:', !!(session as any)?.accessToken);
 
       // 今日の日付範囲を計算
       const today = new Date();
@@ -58,7 +60,8 @@ export default function GoogleCalendarDirect() {
 
       const response = await fetch(calendarUrl.toString(), {
         headers: {
-          'Authorization': `Bearer ${session.accessToken}`,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          'Authorization': `Bearer ${(session as any).accessToken}`,
           'Content-Type': 'application/json',
         },
       });
@@ -218,7 +221,8 @@ export default function GoogleCalendarDirect() {
           <div className="mt-2 space-y-2">
             <div className="bg-gray-100 p-3 rounded text-xs">
               <p><strong>Session User:</strong> {session.user?.name} ({session.user?.email})</p>
-              <p><strong>Access Token:</strong> {session.accessToken ? '✅ あり' : '❌ なし'}</p>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              <p><strong>Access Token:</strong> {(session as any).accessToken ? '✅ あり' : '❌ なし'}</p>
               <p><strong>Events Count:</strong> {events.length}</p>
             </div>
             {events.length > 0 && (

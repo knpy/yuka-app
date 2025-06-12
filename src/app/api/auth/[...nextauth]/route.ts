@@ -1,5 +1,4 @@
-// @ts-expect-error NextAuth v4 types
-import NextAuth from 'next-auth'
+import NextAuth from 'next-auth/next'
 import GoogleProvider from 'next-auth/providers/google'
 
 // デバッグ用：環境変数確認
@@ -9,8 +8,7 @@ console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? `${proce
 console.log('NEXTAUTH_SECRET:', process.env.NEXTAUTH_SECRET ? 'defined' : 'undefined');
 console.log('NEXTAUTH_URL:', process.env.NEXTAUTH_URL);
 
-// @ts-expect-error NextAuth v4 configuration
-const authOptions = {
+const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -40,7 +38,8 @@ const authOptions = {
     }
   },
   callbacks: {
-    async jwt({ token, account, profile }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async jwt({ token, account, profile }: any) {
       console.log('JWT Callback - Account:', account);
       console.log('JWT Callback - Profile:', profile);
       
@@ -52,7 +51,8 @@ const authOptions = {
       }
       return token
     },
-    async session({ session, token }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session({ session, token }: any) {
       console.log('Session Callback - Token keys:', Object.keys(token));
       
       session.accessToken = token.accessToken
@@ -64,9 +64,6 @@ const authOptions = {
   },
   debug: true,
   secret: process.env.NEXTAUTH_SECRET,
-}
-
-// @ts-expect-error NextAuth v4 handler
-const handler = NextAuth(authOptions)
+})
 
 export { handler as GET, handler as POST }
