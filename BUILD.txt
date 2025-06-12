@@ -1,0 +1,136 @@
+2025-06-12T02:49:11.691Z [INFO]: # Build environment configured with Standard build compute type: 8GiB Memory, 4vCPUs, 128GB Disk Space
+2025-06-12T02:49:12.467Z [INFO]: # Cloning repository: git@github.com:knpy/yuka-app.git
+2025-06-12T02:49:13.478Z [INFO]: 
+2025-06-12T02:49:13.478Z [INFO]: Cloning into 'yuka-app'...
+2025-06-12T02:49:13.479Z [INFO]: # Switching to commit: 41f294f8d371e90f8af43816412394aee0a6bb1a
+2025-06-12T02:49:13.492Z [INFO]: Note: switching to '41f294f8d371e90f8af43816412394aee0a6bb1a'.
+                                 You are in 'detached HEAD' state. You can look around, make experimental
+                                 changes and commit them, and you can discard any commits you make in this
+                                 state without impacting any branches by switching back to a branch.
+                                 If you want to create a new branch to retain commits you create, you may
+                                 do so (now or later) by using -c with the switch command. Example:
+                                 git switch -c <new-branch-name>
+                                 Or undo this operation with:
+                                 git switch -
+                                 Turn off this advice by setting config variable advice.detachedHead to false
+                                 HEAD is now at 41f294f fix: amplify.ymlに環境変数設定を追加
+2025-06-12T02:49:13.505Z [INFO]: Successfully cleaned up Git credentials
+2025-06-12T02:49:13.506Z [INFO]: # Checking for Git submodules at: /codebuild/output/src176540785/src/yuka-app/.gitmodules
+2025-06-12T02:49:13.513Z [INFO]: # Retrieving environment cache...
+2025-06-12T02:49:13.545Z [WARNING]: ! Unable to write cache: {"code":"ERR_BAD_REQUEST","message":"Request failed with status code 404"})}
+2025-06-12T02:49:13.545Z [INFO]: ---- Setting Up SSM Secrets ----
+2025-06-12T02:49:13.545Z [INFO]: SSM params {"Path":"/amplify/d3pqwcrqokah2b/develop/","WithDecryption":true}
+2025-06-12T02:49:13.609Z [WARNING]: !Failed to set up process.env.secrets
+2025-06-12T02:49:14.364Z [INFO]: # No package override configuration found.
+2025-06-12T02:49:14.368Z [INFO]: # Retrieving cache...
+2025-06-12T02:49:26.843Z [INFO]: # Extracting cache...
+2025-06-12T02:49:45.396Z [INFO]: # Extraction completed
+2025-06-12T02:49:45.612Z [INFO]: # Retrieved cache
+2025-06-12T02:49:51.335Z [INFO]: ## Starting Backend Build
+                                 ## Checking for associated backend environment...
+                                 ## No backend environment association found, continuing...
+                                 ## Completed Backend Build
+2025-06-12T02:49:51.341Z [INFO]: {"backendDuration": 0}
+                                 ## Starting Frontend Build
+                                 # Starting phase: preBuild
+                                 # Executing command: npm ci
+2025-06-12T02:50:08.043Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-06-12T02:50:08.047Z [WARNING]: npm warn While resolving: @xstate/react@3.2.2
+                                    npm warn Found: react@19.1.0
+                                    npm warn node_modules/react
+                                    npm warn   react@"^19.0.0" from the root project
+                                    npm warn   42 more (@aws-amplify/ui-react, @aws-amplify/ui-react-core, ...)
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer react@"^16.8.0 || ^17.0.0 || ^18.0.0" from @xstate/react@3.2.2
+                                    npm warn node_modules/@aws-amplify/ui-react-core/node_modules/@xstate/react
+                                    npm warn   @xstate/react@"^3.2.2" from @aws-amplify/ui-react-core@3.4.3
+                                    npm warn   node_modules/@aws-amplify/ui-react-core
+                                    npm warn
+                                    npm warn Conflicting peer dependency: react@18.3.1
+                                    npm warn node_modules/react
+                                    npm warn   peer react@"^16.8.0 || ^17.0.0 || ^18.0.0" from @xstate/react@3.2.2
+                                    npm warn   node_modules/@aws-amplify/ui-react-core/node_modules/@xstate/react
+                                    npm warn     @xstate/react@"^3.2.2" from @aws-amplify/ui-react-core@3.4.3
+                                    npm warn     node_modules/@aws-amplify/ui-react-core
+2025-06-12T02:50:08.068Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-06-12T02:50:08.068Z [WARNING]: npm warn While resolving: @xstate/react@3.2.2
+                                    npm warn Found: react@19.1.0
+                                    npm warn node_modules/react
+                                    npm warn   react@"^19.0.0" from the root project
+                                    npm warn   42 more (@aws-amplify/ui-react, @aws-amplify/ui-react-core, ...)
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer react@"^16.8.0 || ^17.0.0 || ^18.0.0" from @xstate/react@3.2.2
+                                    npm warn node_modules/@aws-amplify/ui-react/node_modules/@xstate/react
+                                    npm warn   @xstate/react@"^3.2.2" from @aws-amplify/ui-react@6.11.2
+                                    npm warn   node_modules/@aws-amplify/ui-react
+                                    npm warn
+                                    npm warn Conflicting peer dependency: react@18.3.1
+                                    npm warn node_modules/react
+                                    npm warn   peer react@"^16.8.0 || ^17.0.0 || ^18.0.0" from @xstate/react@3.2.2
+                                    npm warn   node_modules/@aws-amplify/ui-react/node_modules/@xstate/react
+                                    npm warn     @xstate/react@"^3.2.2" from @aws-amplify/ui-react@6.11.2
+                                    npm warn     node_modules/@aws-amplify/ui-react
+2025-06-12T02:50:14.017Z [WARNING]: npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2025-06-12T02:50:14.420Z [WARNING]: npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2025-06-12T02:50:15.513Z [WARNING]: npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+2025-06-12T02:50:35.837Z [INFO]: > yuka-app@0.1.0 prepare
+                                 > husky install || true
+2025-06-12T02:50:35.851Z [WARNING]: sh: line 1: husky: command not found
+2025-06-12T02:50:35.863Z [INFO]: added 1134 packages, and audited 1135 packages in 40s
+2025-06-12T02:50:35.863Z [INFO]: 187 packages are looking for funding
+                                 run `npm fund` for details
+2025-06-12T02:50:35.865Z [INFO]: 1 low severity vulnerability
+                                 To address all issues, run:
+                                 npm audit fix
+                                 Run `npm audit` for details.
+2025-06-12T02:50:35.893Z [INFO]: # Completed phase: preBuild
+                                 # Starting phase: build
+                                 # Executing command: npm run build
+2025-06-12T02:50:36.017Z [INFO]: > yuka-app@0.1.0 build
+                                 > next build
+2025-06-12T02:50:36.909Z [INFO]: ▲ Next.js 15.3.3
+2025-06-12T02:50:36.909Z [INFO]: 
+2025-06-12T02:50:36.937Z [INFO]: Creating an optimized production build ...
+2025-06-12T02:50:59.655Z [INFO]: ✓ Compiled successfully in 19.0s
+2025-06-12T02:50:59.661Z [INFO]: Linting and checking validity of types ...
+2025-06-12T02:51:04.305Z [INFO]: Collecting page data ...
+2025-06-12T02:51:04.862Z [INFO]: NextAuth Debug Info:
+2025-06-12T02:51:04.863Z [INFO]: GOOGLE_CLIENT_ID: 8479351440...
+                                 GOOGLE_CLIENT_SECRET: GOCSPX-6J9...
+                                 NEXTAUTH_SECRET: defined
+                                 NEXTAUTH_URL: https://develop.d3pqwcrqokah2b.amplifyapp.com
+                                 NODE_ENV: production
+                                 設定されたNEXTAUTH_URL: https://develop.d3pqwcrqokah2b.amplifyapp.com
+2025-06-12T02:51:06.419Z [INFO]: Generating static pages (0/6) ...
+2025-06-12T02:51:07.302Z [INFO]: Generating static pages (1/6)
+2025-06-12T02:51:07.302Z [INFO]: Generating static pages (2/6)
+                                 Generating static pages (4/6)
+                                 ✓ Generating static pages (6/6)
+2025-06-12T02:51:07.791Z [INFO]: Finalizing page optimization ...
+2025-06-12T02:51:07.797Z [INFO]: Collecting build traces ...
+2025-06-12T02:51:19.223Z [INFO]: 
+2025-06-12T02:51:19.228Z [INFO]: Route (app)                                 Size  First Load JS
+                                 ┌ ○ /                                    10.1 kB         191 kB
+                                 ├ ○ /_not-found                            986 B         103 kB
+                                 ├ ƒ /api/auth/[...nextauth]                138 B         102 kB
+                                 └ ƒ /api/calendar                          138 B         102 kB
+                                 + First Load JS shared by all             102 kB
+                                 ├ chunks/4bd1b696-6be27384b3354487.js  53.2 kB
+                                 ├ chunks/684-0a2066270af94466.js       46.4 kB
+                                 └ other shared chunks (total)          1.97 kB
+                                 ○  (Static)   prerendered as static content
+                                 ƒ  (Dynamic)  server-rendered on demand
+2025-06-12T02:51:19.251Z [INFO]: # Completed phase: build
+                                 ## Completed Frontend Build
+2025-06-12T02:51:19.314Z [INFO]: ## Build completed successfully
+2025-06-12T02:51:19.315Z [INFO]: # Starting caching...
+2025-06-12T02:51:19.319Z [INFO]: # Creating cache artifact...
+2025-06-12T02:51:33.928Z [INFO]: # Created cache artifact
+2025-06-12T02:51:34.024Z [INFO]: # Uploading cache artifact...
+2025-06-12T02:51:44.007Z [INFO]: # Uploaded cache artifact
+2025-06-12T02:51:44.103Z [INFO]: # Caching completed
+2025-06-12T02:52:02.211Z [INFO]: # Starting environment caching...
+2025-06-12T02:52:02.301Z [INFO]: # Environment caching completed
+
